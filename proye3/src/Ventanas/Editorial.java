@@ -3,19 +3,18 @@ import funci.Ingresar;
 import funci.num;
 import funci.verificar;
 import ddas.eeditorial;
-
-
+import nocone.Conectar;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
-import nocone.Conectar;
 
 
 public class Editorial extends javax.swing.JFrame {
 
-
+Conectar Con = new Conectar();
     
     static Connection conect;
 
@@ -182,13 +181,14 @@ public class Editorial extends javax.swing.JFrame {
     }
 void numeros()
      {
+        conect = Con.Conexion();
     
         String c="";
         String Num="SELECT MAX(Id_Editorial) AS Id_Editorial FROM Editorial";
         
         try {
-            
-            ResultSet rs = Conectar.validaisbn(Num);
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(Num);
             if(rs.next())
             {              
                  c=rs.getString("Id_Editorial");

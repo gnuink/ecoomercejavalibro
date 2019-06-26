@@ -6,6 +6,7 @@ import Ventanas.IngresarLibros;
 import Ventanas.IngresarCategoria;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class verificar {
 
@@ -17,9 +18,10 @@ public class verificar {
         String Nombre = IngresarCategoria.NOMBRE.getText();
         Categoria = "SELECT COUNT(Descripcion) AS Descripcion FROM Categoria WHERE Descripcion = '" + Nombre + "'";
         try {
+            conect = Con.Conexion();
             int loginResultante = 0;
-
-            ResultSet rs = Conectar.validaisbn(Categoria);
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(Categoria);
             while (rs.next()) {
                 loginResultante = rs.getInt("Descripcion");
             }
@@ -33,8 +35,10 @@ public class verificar {
         String Nombre = Editorial.txtnombre.getText();
         Categoria = "SELECT COUNT(Nombre) AS Nombre FROM Editorial WHERE Nombre = '" + Nombre + "'";
         try {
+            conect = Con.Conexion();
             int loginResultante = 0;
-            ResultSet rs = Conectar.validaisbn(Categoria);
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(Categoria);
             while (rs.next()) {
                 loginResultante = rs.getInt("Nombre");
             }
@@ -48,8 +52,10 @@ public class verificar {
         String Titulo = IngresarLibros.txttitulo.getText();
         Categoria = "SELECT COUNT(Titulo) AS Titulo FROM Libros WHERE Titulo = '" + Titulo + "'";
         try {
+            conect = Con.Conexion();
             int loginResultante = 0;
-            ResultSet rs = Conectar.validaisbn(Categoria);
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(Categoria);
             while (rs.next()) {
                 loginResultante = rs.getInt("Titulo");
             }
@@ -63,8 +69,10 @@ public class verificar {
         String Isbn = IngresarLibros.txtISBN.getText();
         Categoria = "SELECT COUNT(Isbn) AS Isbn FROM Libros WHERE Isbn = '" + Isbn + "'";
         try {
+            conect = Con.Conexion();
             int loginResultante = 0;
-            ResultSet rs = Conectar.validaisbn(Categoria);
+            Statement st = conect.createStatement();
+            ResultSet rs = st.executeQuery(Categoria);
             while (rs.next()) {
                 loginResultante = rs.getInt("Isbn");
             }

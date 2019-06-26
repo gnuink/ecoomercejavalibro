@@ -87,7 +87,7 @@ public class Ingresar {
             pst3.setString(6, datos.getEditorial());
             pst3.setInt(7, datos.getPrecio_Costo());
             pst3.setInt(8, datos.getPrecio_Venta());
-            pst3.setInt(9, 0);
+            pst3.setInt(9, datos.getDescuento());
             pst3.setInt(10, datos.getStock());
             pst3.setString(11, datos.getNivel_Pedido());
 
