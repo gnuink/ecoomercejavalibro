@@ -17,31 +17,7 @@ public class Ingresar {
     private String Editorial;
     private String Libros;
 
-    public boolean CrearCategoria(ccategoria datos) {
-        conect = Con.Conexion();
 
-        Categoria = "insert into Categoria (Id_Categoria,Descripcion)"
-                + " values (?,?)";
-        try {
-
-            PreparedStatement pst3 = conect.prepareStatement(Categoria);
-
-            pst3.setString(1, datos.getId_Categoria());
-            pst3.setString(2, datos.getDescripcion());
-
-            int N3 = pst3.executeUpdate();
-
-            if (N3 != 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-            return false;
-        }
-
-    }
 
     public boolean CrearEditorial(eeditorial datos) {
         conect = Con.Conexion();
@@ -86,10 +62,35 @@ public class Ingresar {
             pst3.setInt(5, datos.getIsbn());
             pst3.setString(6, datos.getEditorial());
             pst3.setInt(7, datos.getPrecio_Costo());
-            pst3.setInt(8, datos.getPrecio_Venta());
-            pst3.setInt(9, datos.getDescuento());
+            pst3.setString(8, datos.getPrecio_Venta());
+            pst3.setInt(9, 0);
             pst3.setInt(10, datos.getStock());
             pst3.setString(11, datos.getNivel_Pedido());
+
+            int N3 = pst3.executeUpdate();
+
+            if (N3 != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+            return false;
+        }
+
+    }
+        public boolean CrearCategoria(ccategoria datos) {
+        conect = Con.Conexion();
+
+        Categoria = "insert into Categoria (Id_Categoria,Descripcion)"
+                + " values (?,?)";
+        try {
+
+            PreparedStatement pst3 = conect.prepareStatement(Categoria);
+
+            pst3.setString(1, datos.getId_Categoria());
+            pst3.setString(2, datos.getDescripcion());
 
             int N3 = pst3.executeUpdate();
 

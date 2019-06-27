@@ -8,7 +8,6 @@ import nocone.Conectar;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class IngresarCategoria extends javax.swing.JFrame {
@@ -31,15 +30,12 @@ public class IngresarCategoria extends javax.swing.JFrame {
     }
 
     void numeros() {
-        conect = Con.Conexion();
-        int j;
 
         String c = "";
         String Num = "SELECT MAX(Id_Categoria) AS Id_Categoria FROM Categoria";
 
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Num);
+            ResultSet rs = Conectar.validaisbn(Num);
             if (rs.next()) {
                 c = rs.getString("Id_Categoria");
             }

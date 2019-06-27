@@ -1,6 +1,6 @@
 package Ventanas;
 
-
+import nocone.Conectar;
 import funci.num;
 import funci.verificar;
 import funci.Ingresar;
@@ -11,16 +11,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 public class IngresarLibros extends javax.swing.JFrame {
- Conectar Con = new Conectar();
+
+    Conectar Con = new Conectar();
     static Connection conect;
     static String Categoria;
     static String Editorial;
+
     public IngresarLibros() {
         initComponents();
         consultar_Categoria();
@@ -31,152 +33,139 @@ public class IngresarLibros extends javax.swing.JFrame {
         txtID.setVisible(true);
         IDCATEGORIA.setVisible(false);
         IDEDITORIAL.setVisible(false);
+        txtventa.setEnabled(false);
     }
-void limpiar(){
+
+    void limpiar() {
         txtID.setText("");
         txttitulo.setText("");
         txtautor.setText("");
         txtISBN.setText("");
         txtcosto.setText("");
         txtventa.setText("");
-        DESCUENTO.setText("");
+
         txtSTOCK.setText("");
     }
-void mostrardatos(String nombre){
-    conect = Con.Conexion();
-    DefaultTableModel modelo= new DefaultTableModel();
-    modelo.addColumn("ID");
-    modelo.addColumn("TITULO");
-    modelo.addColumn("AUTOR");
-    modelo.addColumn("CATEGORIA");
-    modelo.addColumn("Nº ISBN");
-    modelo.addColumn("EDITORIAL");
-    modelo.addColumn("PRECIO COSTO");
-    modelo.addColumn("PRECIO VENTA");
-    modelo.addColumn("DESCUENTO");
-    modelo.addColumn("STOCK");
-    modelo.addColumn("Nivel Pedido");
-    tablalibro.setModel(modelo);
-    String sql="";
-    if(nombre.equals(""))
-    {
-        sql="SELECT Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido\n" +
-            "FROM Libros\n" +
-            "ORDER BY Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido;";
-    }else
-    {
-        sql="SELECT Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido\n" +
-            "FROM Libros\n" +
-            "WHERE Libros.Titulo='"+nombre+"'\n" +
-            "ORDER BY Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido;";
-    }
- 
-    String []datos = new String [11];
+
+    void mostrardatos(String nombre) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("TITULO");
+        modelo.addColumn("AUTOR");
+        modelo.addColumn("CATEGORIA");
+        modelo.addColumn("Nº ISBN");
+        modelo.addColumn("EDITORIAL");
+        modelo.addColumn("PRECIO COSTO");
+        modelo.addColumn("PRECIO VENTA");
+        modelo.addColumn("DESCUENTO");
+        modelo.addColumn("STOCK");
+        modelo.addColumn("Nivel Pedido");
+        tablalibro.setModel(modelo);
+        String sql = "";
+        if (nombre.equals("")) {
+            sql = "SELECT Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido\n"
+                    + "FROM Libros\n"
+                    + "ORDER BY Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido;";
+        } else {
+            sql = "SELECT Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido\n"
+                    + "FROM Libros\n"
+                    + "WHERE Libros.Titulo='" + nombre + "'\n"
+                    + "ORDER BY Libros.Id_Libro, Libros.Titulo, Libros.Autor, Libros.Categoria, Libros.Isbn, Libros.Editorial, Libros.Precio_Costo, Libros.Precio_Venta, Libros.Descuento, Libros.Stock, Libros.Nivel_Pedido;";
+        }
+
+        String[] datos = new String[11];
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while(rs.next()){
-                datos[0]=rs.getString(1);
-                datos[1]=rs.getString(2);
-                datos[2]=rs.getString(3);
-                datos[3]=rs.getString(4);
-                datos[4]=rs.getString(5);
-                datos[5]=rs.getString(6);
-                datos[6]=rs.getString(7);
-                datos[7]=rs.getString(8);
-                datos[8]=rs.getString(9);
-                datos[9]=rs.getString(10);
-                datos[10]=rs.getString(11);
+            ResultSet rs = Conectar.validaisbn(sql);
+            while (rs.next()) {
+                datos[0] = rs.getString(1);
+                datos[1] = rs.getString(2);
+                datos[2] = rs.getString(3);
+                datos[3] = rs.getString(4);
+                datos[4] = rs.getString(5);
+                datos[5] = rs.getString(6);
+                datos[6] = rs.getString(7);
+                datos[7] = rs.getString(8);
+                datos[8] = rs.getString(9);
+                datos[9] = rs.getString(10);
+                datos[10] = rs.getString(11);
                 modelo.addRow(datos);
             }
             tablalibro.setModel(modelo);
         } catch (SQLException ex) {
             Logger.getLogger(IngresarLibros.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    } 
- void numeros()
-     {
-        conect = Con.Conexion();
-        int j;
-    
-        String c="";
-        String Num="SELECT MAX(Id_Libro) AS Id_Libro FROM Libros";
-        
-        try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Num);
-            if(rs.next())
-            {              
-                 c=rs.getString("Id_Libro");
-            }
-            if(c==null)
-             {
-                 txtID.setText("0001");
-             }
-            else{   
-                 char r1 = c.charAt(2);
-                 char r2 = c.charAt(3);
 
-                 String juntar = ""+r1+r2;
-                 
-                 int var=Integer.parseInt(juntar);
-                 num gen = new num();
-                 gen.generar(var);
-            
-                txtID.setText(gen.serie());    
-                
-             }
-            } 
-        catch (SQLException ex) 
-        {
-           JOptionPane.showMessageDialog(null, ex);
+    }
+
+    void numeros() {
+        String c = "";
+        String Num = "SELECT MAX(Id_Libro) AS Id_Libro FROM Libros";
+
+        try {
+
+            ResultSet rs = Conectar.validaisbn(Num);
+            if (rs.next()) {
+                c = rs.getString("Id_Libro");
+            }
+            if (c == null) {
+                txtID.setText("0001");
+            } else {
+                char r1 = c.charAt(2);
+                char r2 = c.charAt(3);
+
+                String juntar = "" + r1 + r2;
+
+                int var = Integer.parseInt(juntar);
+                num gen = new num();
+                gen.generar(var);
+
+                txtID.setText(gen.serie());
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
         }
     }
-public void consultar_Categoria(){
-        conect = Con.Conexion();
-        String Categoria  = "SELECT  Descripcion FROM Categoria ORDER BY Descripcion ASC";
 
+    public void consultar_Categoria() {
+        String Categoria = "SELECT  Descripcion FROM Categoria ORDER BY Descripcion ASC";
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Categoria);
-                combocategoria.addItem("ingrese una opción");
-   
-            while(rs.next()){
+            ResultSet rs = Conectar.validaisbn(Categoria);
+            combocategoria.addItem("ingrese una opción");
+
+            while (rs.next()) {
                 combocategoria.addItem(rs.getString("Descripcion"));
 
-               
-   }
+            }
 
-} catch (SQLException e) {
+        } catch (SQLException e) {
 
-    JOptionPane.showMessageDialog(null, e);
-    
-}
+            JOptionPane.showMessageDialog(null, e);
 
-}
-public void consultar_Editorial(){
-        conect = Con.Conexion();
-        String Categoria  = "SELECT  Nombre FROM Editorial ORDER BY Nombre ASC";
+        }
+
+    }
+
+    public void consultar_Editorial() {
+        String Categoria = "SELECT  Nombre FROM Editorial ORDER BY Nombre ASC";
 
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Categoria);
-                comboeditorial.addItem("ingrese una opción");
-   
-            while(rs.next()){
+            ResultSet rs = Conectar.validaisbn(Categoria);
+            comboeditorial.addItem("ingrese una opción");
+
+            while (rs.next()) {
                 comboeditorial.addItem(rs.getString("Nombre"));
 
-               
-   }
+            }
 
-} catch (SQLException e) {
+        } catch (SQLException e) {
 
-    JOptionPane.showMessageDialog(null, e);
-    
-}
-        
+            JOptionPane.showMessageDialog(null, e);
+
+        }
+
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -189,7 +178,6 @@ public void consultar_Editorial(){
         JISBN = new javax.swing.JLabel();
         JCOSTO = new javax.swing.JLabel();
         JVENTA = new javax.swing.JLabel();
-        JDES = new javax.swing.JLabel();
         JSTOCK = new javax.swing.JLabel();
         JEDIT = new javax.swing.JLabel();
         JPED = new javax.swing.JLabel();
@@ -200,7 +188,6 @@ public void consultar_Editorial(){
         comboeditorial = new javax.swing.JComboBox<String>();
         txtcosto = new javax.swing.JTextField();
         txtventa = new javax.swing.JTextField();
-        DESCUENTO = new javax.swing.JTextField();
         txtSTOCK = new javax.swing.JTextField();
         comboPEDIDO = new javax.swing.JComboBox<String>();
         btningresolibro = new javax.swing.JButton();
@@ -257,15 +244,10 @@ public void consultar_Editorial(){
         JVENTA.setText("Precio Venta:");
         getContentPane().add(JVENTA, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, -1));
 
-        JDES.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        JDES.setForeground(new java.awt.Color(255, 255, 255));
-        JDES.setText("Descuento:");
-        getContentPane().add(JDES, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, -1));
-
         JSTOCK.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         JSTOCK.setForeground(new java.awt.Color(255, 255, 255));
         JSTOCK.setText("Stock:");
-        getContentPane().add(JSTOCK, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 170, -1, -1));
+        getContentPane().add(JSTOCK, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, -1, -1));
 
         JEDIT.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         JEDIT.setForeground(new java.awt.Color(255, 255, 255));
@@ -275,7 +257,7 @@ public void consultar_Editorial(){
         JPED.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         JPED.setForeground(new java.awt.Color(255, 255, 255));
         JPED.setText("ingrese titulo ->");
-        getContentPane().add(JPED, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 360, -1, -1));
+        getContentPane().add(JPED, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 70, -1, -1));
         getContentPane().add(txttitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, 122, -1));
         getContentPane().add(txtautor, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, 122, -1));
 
@@ -302,7 +284,15 @@ public void consultar_Editorial(){
         });
         getContentPane().add(comboeditorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, 122, -1));
 
+        txtcosto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcostoActionPerformed(evt);
+            }
+        });
         txtcosto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtcostoKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtcostoKeyTyped(evt);
             }
@@ -316,27 +306,20 @@ public void consultar_Editorial(){
         });
         getContentPane().add(txtventa, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 127, -1));
 
-        DESCUENTO.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DESCUENTOActionPerformed(evt);
-            }
-        });
-        DESCUENTO.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                DESCUENTOKeyTyped(evt);
-            }
-        });
-        getContentPane().add(DESCUENTO, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 130, 127, -1));
-
         txtSTOCK.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtSTOCKKeyTyped(evt);
             }
         });
-        getContentPane().add(txtSTOCK, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 170, 127, -1));
+        getContentPane().add(txtSTOCK, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 127, -1));
 
-        comboPEDIDO.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "","Bajo", "Medio", "Alto"}));
-        getContentPane().add(comboPEDIDO, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 220, 127, -1));
+        comboPEDIDO.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccione una opcion","Bajo", "Medio", "Alto"}));
+        comboPEDIDO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPEDIDOActionPerformed(evt);
+            }
+        });
+        getContentPane().add(comboPEDIDO, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 180, 127, -1));
 
         btningresolibro.setText("Ingresar Libro");
         btningresolibro.addActionListener(new java.awt.event.ActionListener() {
@@ -344,7 +327,7 @@ public void consultar_Editorial(){
                 btningresolibroActionPerformed(evt);
             }
         });
-        getContentPane().add(btningresolibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 270, 110, 30));
+        getContentPane().add(btningresolibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 120, 40));
 
         tablalibro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -359,7 +342,7 @@ public void consultar_Editorial(){
         ));
         jScrollPane1.setViewportView(tablalibro);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 435, 674, 120));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 1030, 120));
 
         btneliminar.setText("Eliminar Libro");
         btneliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -367,7 +350,7 @@ public void consultar_Editorial(){
                 btneliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(btneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(201, 573, -1, -1));
+        getContentPane().add(btneliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 510, 130, 50));
 
         btnsalir.setText("Volver");
         btnsalir.addActionListener(new java.awt.event.ActionListener() {
@@ -375,12 +358,12 @@ public void consultar_Editorial(){
                 btnsalirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(426, 573, -1, -1));
+        getContentPane().add(btnsalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 510, 100, 40));
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("SELECCIONE UN LIBRO");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 30, -1, -1));
 
         btnmostrar.setText("Mostrar Todo");
         btnmostrar.addActionListener(new java.awt.event.ActionListener() {
@@ -388,7 +371,7 @@ public void consultar_Editorial(){
                 btnmostrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnmostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 390, 660, -1));
+        getContentPane().add(btnmostrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 310, 1050, 30));
 
         jTitulo1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jTitulo1.setForeground(new java.awt.Color(255, 255, 255));
@@ -398,19 +381,19 @@ public void consultar_Editorial(){
         IDEDITORIAL.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         IDEDITORIAL.setForeground(new java.awt.Color(255, 255, 255));
         getContentPane().add(IDEDITORIAL, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, 25, -1));
-        getContentPane().add(IDCATEGORIA, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 170, 25, -1));
+        getContentPane().add(IDCATEGORIA, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 25, -1));
 
         txtbuscarlibro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtbuscarlibroActionPerformed(evt);
             }
         });
-        getContentPane().add(txtbuscarlibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 360, 181, -1));
+        getContentPane().add(txtbuscarlibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 90, 181, -1));
 
         JPED1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         JPED1.setForeground(new java.awt.Color(255, 255, 255));
         JPED1.setText("Nivel Pedido:");
-        getContentPane().add(JPED1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, -1, -1));
+        getContentPane().add(JPED1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, -1, -1));
 
         btnbuscarlibro.setText("Buscar ");
         btnbuscarlibro.addActionListener(new java.awt.event.ActionListener() {
@@ -418,7 +401,7 @@ public void consultar_Editorial(){
                 btnbuscarlibroActionPerformed(evt);
             }
         });
-        getContentPane().add(btnbuscarlibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 360, -1, -1));
+        getContentPane().add(btnbuscarlibro, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 90, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Arial Black", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -428,12 +411,8 @@ public void consultar_Editorial(){
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void DESCUENTOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DESCUENTOActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DESCUENTOActionPerformed
-
     private void btnmostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmostrarActionPerformed
-       mostrardatos("");
+        mostrardatos("");
     }//GEN-LAST:event_btnmostrarActionPerformed
 
     private void btnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsalirActionPerformed
@@ -441,45 +420,33 @@ public void consultar_Editorial(){
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void combocategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_combocategoriaActionPerformed
-        conect = Con.Conexion();
-        Categoria = "SELECT  Id_Categoria FROM Categoria Where Descripcion = '"+ this.combocategoria.getSelectedItem()+"'";
-
+        Categoria = "SELECT  Id_Categoria FROM Categoria Where Descripcion = '" + this.combocategoria.getSelectedItem() + "'";
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Categoria);
-   
-            while(rs.next()){
+            ResultSet rs = Conectar.validaisbn(Categoria);
+
+            while (rs.next()) {
                 this.IDCATEGORIA.setText(String.valueOf(rs.getString("Id_Categoria")));
 
-               
-   }
+            }
 
-} catch (SQLException e) {
+        } catch (SQLException e) {
 
-    JOptionPane.showMessageDialog(null, e);
-    
-}
+            JOptionPane.showMessageDialog(null, e);
+
+        }
     }//GEN-LAST:event_combocategoriaActionPerformed
 
     private void comboeditorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboeditorialActionPerformed
-        conect = Con.Conexion();
-        Editorial = "SELECT  Id_Editorial FROM Editorial Where Nombre = '"+ this.comboeditorial.getSelectedItem()+"'";
-
+        // editado como lo quiere el profe.
+        Editorial = "SELECT  Id_Editorial FROM Editorial Where Nombre = '" + this.comboeditorial.getSelectedItem() + "'";
         try {
-            Statement st = conect.createStatement();
-            ResultSet rs = st.executeQuery(Editorial);
-   
-            while(rs.next()){
-                this.IDEDITORIAL.setText(String.valueOf(rs.getString("Id_Editorial")));
-
-               
-   }
-
-} catch (SQLException e) {
-
-    JOptionPane.showMessageDialog(null, e);
-    
-}
+            ResultSet rsitem = Conectar.validaisbn(Editorial);
+            while (rsitem.next()) {
+                this.IDEDITORIAL.setText(String.valueOf(rsitem.getString("Id_Editorial")));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_comboeditorialActionPerformed
 
     private void btningresolibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresolibroActionPerformed
@@ -488,7 +455,7 @@ public void consultar_Editorial(){
             txttitulo.requestFocus();
             return;
         }
-         if (txtautor.getText().length() == 0) {
+        if (txtautor.getText().length() == 0) {
             JOptionPane.showMessageDialog(null, " ingresar un AUTOR");
             txtautor.requestFocus();
             return;
@@ -508,21 +475,17 @@ public void consultar_Editorial(){
             txtventa.requestFocus();
             return;
         }
-        if (DESCUENTO.getText().length() == 0) {
-            JOptionPane.showMessageDialog(null, " ingresar un DESCUENTO");
-            DESCUENTO.requestFocus();
-            return;
-        }
+
         if (txtSTOCK.getText().length() == 0) {
             JOptionPane.showMessageDialog(null, " ingresar una cantidad de STOCK");
             txtSTOCK.requestFocus();
             return;
         }
-        
+
         llibros datos = new llibros();
         Ingresar funcion = new Ingresar();
         verificar verificar = new verificar();
-        
+
         int Titulo = verificar.verificarTitulo();
         if (Titulo == 1) {
             JOptionPane.showMessageDialog(null, " titulo : " + txttitulo.getText() + ", ya fue ingresado.");
@@ -531,7 +494,7 @@ public void consultar_Editorial(){
             return;
 
         }
-        
+
         int Isbn = verificar.verificarIsbn();
         if (Isbn == 1) {
             JOptionPane.showMessageDialog(null, " numero de ISBN : " + txtISBN.getText() + ", ya fue ingresado.");
@@ -540,7 +503,7 @@ public void consultar_Editorial(){
             return;
 
         }
-        
+
         datos.setId_Libros(txtID.getText());
         datos.setTitulo(txttitulo.getText());
         datos.setAutor(txtautor.getText());
@@ -548,12 +511,11 @@ public void consultar_Editorial(){
         datos.setIsbn(Integer.parseInt(txtISBN.getText()));
         datos.setEditorial(IDEDITORIAL.getText());
         datos.setPrecio_Costo(Integer.parseInt(txtcosto.getText()));
-        datos.setPrecio_Venta(Integer.parseInt(txtventa.getText()));
-        datos.setDescuento(Integer.parseInt(DESCUENTO.getText()));
+        datos.setPrecio_Venta(txtventa.getText());
         datos.setStock(Integer.parseInt(txtSTOCK.getText()));
         int Nivel = comboPEDIDO.getSelectedIndex();
         datos.setNivel_Pedido((String) comboPEDIDO.getItemAt(Nivel));
-        
+
         if (funcion.CrearLibros(datos)) {
             JOptionPane.showMessageDialog(null, " libro fue ingresado al sistema, exicto!");
             limpiar();
@@ -561,74 +523,66 @@ public void consultar_Editorial(){
             mostrardatos("");
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo ingresar la editorial");
-        }                                          
-                                              
+        }
+
     }//GEN-LAST:event_btningresolibroActionPerformed
 
     private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
-    conect =Con.Conexion();
-    int fila = tablalibro.getSelectedRow();
-    String cod="";
-    cod=tablalibro.getValueAt(fila, 0).toString();
-    int seleccion = JOptionPane.showOptionDialog(
-    null,
-   "¿Seguro que desea Elimnar el Libro?", 
-   "opciones",
-   JOptionPane.YES_NO_CANCEL_OPTION,
-   JOptionPane.QUESTION_MESSAGE,
-   null,    
-   new Object[] { "SI", "NO" },   
-   "SI");
+        conect = Con.Conexion();
+        int fila = tablalibro.getSelectedRow();
+        String cod = "";
+        cod = tablalibro.getValueAt(fila, 0).toString();
+        int seleccion = JOptionPane.showOptionDialog(
+                null,
+                "¿Seguro que desea Elimnar el Libro?",
+                "opciones",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{"SI", "NO"},
+                "SI");
 
-if (seleccion != 1){
-    try {
-        PreparedStatement pst = conect.prepareStatement("DELETE FROM Libros WHERE Id_Libro ='"+cod+"'");
-        pst.executeUpdate();
-        JOptionPane.showMessageDialog(null, " Libro fue eliminado con exito");
-        mostrardatos("");
-    } catch (Exception e) {
-    }
-}     
+        if (seleccion != 1) {
+            try {
+                PreparedStatement pst = conect.prepareStatement("DELETE FROM Libros WHERE Id_Libro ='" + cod + "'");
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, " Libro fue eliminado con exito");
+                mostrardatos("");
+            } catch (Exception e) {
+            }
+        }
     }//GEN-LAST:event_btneliminarActionPerformed
 
     private void txtISBNKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtISBNKeyTyped
-        char ty =evt.getKeyChar();
-            if ((((ty<'0')||(ty>'9')))&&(ty!=KeyEvent.VK_BACK_SPACE) && (ty!=KeyEvent.VK_ENTER)){
+        char ty = evt.getKeyChar();
+        if ((((ty < '0') || (ty > '9'))) && (ty != KeyEvent.VK_BACK_SPACE) && (ty != KeyEvent.VK_ENTER)) {
             getToolkit().beep();
             evt.consume();
-            }
+        }
     }//GEN-LAST:event_txtISBNKeyTyped
 
     private void txtcostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcostoKeyTyped
-            char ty =evt.getKeyChar();
-            if ((((ty<'0')||(ty>'9')))&&(ty!=KeyEvent.VK_BACK_SPACE) && (ty!=KeyEvent.VK_ENTER)){
+        char ty = evt.getKeyChar();
+        if ((((ty < '0') || (ty > '9'))) && (ty != KeyEvent.VK_BACK_SPACE) && (ty != KeyEvent.VK_ENTER)) {
             getToolkit().beep();
             evt.consume();
-            }
+        }
     }//GEN-LAST:event_txtcostoKeyTyped
 
     private void txtventaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtventaKeyTyped
-            char ty =evt.getKeyChar();
-            if ((((ty<'0')||(ty>'9')))&&(ty!=KeyEvent.VK_BACK_SPACE) && (ty!=KeyEvent.VK_ENTER)){
+        char ty = evt.getKeyChar();
+        if ((((ty < '0') || (ty > '9'))) && (ty != KeyEvent.VK_BACK_SPACE) && (ty != KeyEvent.VK_ENTER)) {
             getToolkit().beep();
             evt.consume();
-            }
+        }
     }//GEN-LAST:event_txtventaKeyTyped
 
-    private void DESCUENTOKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DESCUENTOKeyTyped
-            char ty =evt.getKeyChar();
-            if ((((ty<'0')||(ty>'9')))&&(ty!=KeyEvent.VK_BACK_SPACE) && (ty!=KeyEvent.VK_ENTER)){
-            getToolkit().beep();
-            evt.consume();
-            }
-    }//GEN-LAST:event_DESCUENTOKeyTyped
-
     private void txtSTOCKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSTOCKKeyTyped
-            char ty =evt.getKeyChar();
-            if ((((ty<'0')||(ty>'9')))&&(ty!=KeyEvent.VK_BACK_SPACE) && (ty!=KeyEvent.VK_ENTER)){
+        char ty = evt.getKeyChar();
+        if ((((ty < '0') || (ty > '9'))) && (ty != KeyEvent.VK_BACK_SPACE) && (ty != KeyEvent.VK_ENTER)) {
             getToolkit().beep();
             evt.consume();
-            }
+        }
     }//GEN-LAST:event_txtSTOCKKeyTyped
 
     private void btnbuscarlibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarlibroActionPerformed
@@ -638,6 +592,22 @@ if (seleccion != 1){
     private void txtbuscarlibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarlibroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtbuscarlibroActionPerformed
+
+    private void comboPEDIDOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPEDIDOActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboPEDIDOActionPerformed
+
+    private void txtcostoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcostoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcostoActionPerformed
+
+    private void txtcostoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcostoKeyReleased
+        String Costo = txtcosto.getText();
+        double costo = Integer.parseInt(Costo);
+        double venta = (costo * 50) / 100;
+        double b = venta + costo;
+        txtventa.setText(b + "");
+    }//GEN-LAST:event_txtcostoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -675,13 +645,11 @@ if (seleccion != 1){
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField DESCUENTO;
     private javax.swing.JTextField IDCATEGORIA;
     private javax.swing.JTextField IDEDITORIAL;
     private javax.swing.JLabel JAUTOR;
     private javax.swing.JLabel JCAT;
     private javax.swing.JLabel JCOSTO;
-    private javax.swing.JLabel JDES;
     private javax.swing.JLabel JEDIT;
     private javax.swing.JLabel JISBN;
     private javax.swing.JLabel JPED;

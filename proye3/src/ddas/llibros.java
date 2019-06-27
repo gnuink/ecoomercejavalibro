@@ -9,7 +9,7 @@ public class llibros {
     private int Isbn;
     private String Editorial;
     private int Precio_Costo;
-    private int Precio_Venta;
+    private String Precio_Venta;
     private int Descuento;
     private int Stock;
     private String Nivel_Pedido;
@@ -18,7 +18,7 @@ public class llibros {
 
     }
 
-    public llibros(String Id_Libros, String Titulo, String Autor, String Categoria, int Isbn, String Editorial, int Precio_Costo, int Precio_Venta, int Descuento, int Stock, String Nivel_Pedido) {
+    public llibros(String Id_Libros, String Titulo, String Autor, String Categoria, int Isbn, String Editorial, int Precio_Costo, String Precio_Venta, int Descuento, int Stock, String Nivel_Pedido) {
         this.Id_Libros = Id_Libros;
         this.Titulo = Titulo;
         this.Autor = Autor;
@@ -88,11 +88,11 @@ public class llibros {
         this.Precio_Costo = Precio_Costo;
     }
 
-    public int getPrecio_Venta() {
+    public String getPrecio_Venta() {
         return Precio_Venta;
     }
 
-    public void setPrecio_Venta(int Precio_Venta) {
+    public void setPrecio_Venta(String Precio_Venta) {
         this.Precio_Venta = Precio_Venta;
     }
 
